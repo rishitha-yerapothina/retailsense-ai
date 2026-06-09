@@ -1,0 +1,4 @@
+Customer: I came looking for the new winter jackets but the store is out of stock.
+Staff: I apologize, we are waiting on the next shipment today.
+Customer: That's disappointing, especially because the price seemed higher than expected.
+Staff: I will check if we can offer a discount and update the inventory team.
