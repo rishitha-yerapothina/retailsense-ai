@@ -1,5 +1,27 @@
 const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:8000';
 
+// Check if browser supports Web Speech API
+export function supportsRecognition() {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  return !!SpeechRecognition;
+}
+
+// Request microphone permission
+export async function requestMicrophonePermission() {
+  try {
+    await navigator.mediaDevices.getUserMedia({ audio: true });
+    return true;
+  } catch (error) {
+    if (error.name === 'NotAllowedError') {
+      throw new Error('Microphone permission was denied.');
+    } else if (error.name === 'NotFoundError') {
+      throw new Error('No microphone device found.');
+    } else {
+      throw new Error(`Unable to access microphone: ${error.message}`);
+    }
+  }
+}
+
 export function analyzeAudio(file, onProgress) {
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();

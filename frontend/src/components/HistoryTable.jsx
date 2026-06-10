@@ -2,7 +2,7 @@ function HistoryTable({ history, onDelete }) {
   return (
     <div className="history-table">
       <div className="history-header">
-        <span>File</span>
+        <span>Transcript</span>
         <span>Sentiment</span>
         <span>Issues</span>
         <span>When</span>
@@ -13,7 +13,7 @@ function HistoryTable({ history, onDelete }) {
       ) : (
         history.map((item) => (
           <div key={item.id} className="history-row">
-            <span>{item.filename}</span>
+            <span title={item.transcript}>{item.transcript.substring(0, 50)}...</span>
             <span>{item.sentiment}</span>
             <span>{item.issues.join(', ')}</span>
             <span>{new Date(item.timestamp).toLocaleString()}</span>

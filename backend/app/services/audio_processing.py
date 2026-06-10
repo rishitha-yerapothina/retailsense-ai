@@ -3,7 +3,7 @@ import tempfile
 from pathlib import Path
 from typing import Optional
 from fastapi import HTTPException, UploadFile
-from .config import ALLOWED_EXTENSIONS, ASR_MODEL, HF_API_TOKEN_ENV
+from app.config import ALLOWED_EXTENSIONS, ASR_MODEL, HF_API_TOKEN_ENV
 
 try:
     from transformers import pipeline

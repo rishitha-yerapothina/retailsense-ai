@@ -2,7 +2,7 @@ import re
 import json
 import os
 import requests
-from .config import SENTIMENT_MODEL, HF_API_TOKEN_ENV
+from app.config import SENTIMENT_MODEL, HF_API_TOKEN_ENV
 
 try:
     from transformers import pipeline

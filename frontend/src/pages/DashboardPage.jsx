@@ -20,22 +20,22 @@ function DashboardPage({ analysisResult }) {
       <div className="page-header">
         <div>
           <h2>RetailSense AI Dashboard</h2>
-          <p>Monitor audio analysis, sentiment, and store conversation intelligence.</p>
+          <p>Monitor voice analysis, sentiment, and store conversation intelligence.</p>
         </div>
       </div>
-      <StatsCards totalAnalyses={history.length} recentAnalysis={latestItem} />
+      <StatsCards history={history} />
       <section className="action-grid">
         <article className="panel">
-          <h3>Live transcript preview</h3>
-          <p>{analysisResult?.transcript || 'Upload a conversation to analyze an automatic transcript.'}</p>
+          <h3>Latest transcript</h3>
+          <p>{latestItem?.transcript?.substring(0, 200) || 'Record a conversation to analyze an automatic transcript.'}{(latestItem?.transcript?.length || 0) > 200 ? '...' : ''}</p>
         </article>
         <article className="panel">
           <h3>Sentiment snapshot</h3>
-          <p>{analysisResult ? `${analysisResult.sentiment} (${analysisResult.confidence})` : 'Start a new analysis to see sentiment scores.'}</p>
+          <p>{latestItem ? `${latestItem.sentiment} (${(latestItem.confidence * 100).toFixed(1)}%)` : 'Start a new analysis to see sentiment scores.'}</p>
         </article>
         <article className="panel">
-          <h3>New insights</h3>
-          <p>{analysisResult?.issues?.join(', ') || 'Detected issues will appear here after analysis.'}</p>
+          <h3>Key insights</h3>
+          <p>{latestItem?.issues?.join(', ') || 'Detected issues will appear here after analysis.'}</p>
         </article>
       </section>
       <section className="recent-panel">
@@ -46,7 +46,7 @@ function DashboardPage({ analysisResult }) {
           <div className="recent-list">
             {history.slice(0, 4).map((item) => (
               <div key={item.id} className="recent-item">
-                <strong>{item.filename}</strong>
+                <strong>{item.transcript.substring(0, 50)}...</strong>
                 <span>{item.sentiment}</span>
                 <small>{new Date(item.timestamp).toLocaleDateString()}</small>
               </div>
