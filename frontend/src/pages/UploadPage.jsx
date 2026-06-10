@@ -4,6 +4,8 @@ import { analyzeText } from '../services/api';
 function UploadPage({ onAnalysis }) {
   const [isRecording, setIsRecording] = useState(false);
   const [transcript, setTranscript] = useState('');
+  const [useManual, setUseManual] = useState(false);
+  const [manualTranscript, setManualTranscript] = useState('');
   const [recordingTime, setRecordingTime] = useState(0);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -16,7 +18,8 @@ function UploadPage({ onAnalysis }) {
   useEffect(() => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRecognition) {
-      setError('Speech Recognition API is not supported in your browser.');
+      setUseManual(true);
+      setError('Microphone access is unavailable on this device. You can paste the conversation transcript manually.');
       return;
     }
 
@@ -50,7 +53,8 @@ function UploadPage({ onAnalysis }) {
       if (event.error === 'network') {
         setError('Network error. Please check your internet connection.');
       } else if (event.error === 'not-allowed') {
-        setError('Microphone access denied. Please enable microphone permissions.');
+        setUseManual(true);
+        setError('Microphone access is unavailable on this device. You can paste the conversation transcript manually.');
       } else if (event.error === 'no-speech') {
         setError('No speech detected. Please try again.');
       } else {
@@ -125,6 +129,17 @@ function UploadPage({ onAnalysis }) {
     }
   };
 
+  const handleUseManual = () => {
+    if (!manualTranscript.trim()) {
+      setError('Please paste or type the conversation transcript.');
+      return;
+    }
+    setTranscript(manualTranscript.trim());
+    setSuccess('Manual transcript loaded.');
+    setError('');
+    setUseManual(true);
+  };
+
   const formatTime = (seconds) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
@@ -174,6 +189,23 @@ function UploadPage({ onAnalysis }) {
               </div>
             )}
           </div>
+
+          {/* Manual transcript fallback message and input */}
+          {useManual && (
+            <div className="transcript-section">
+              <h3>Manual Transcript</h3>
+              <p>Microphone access is unavailable on this device. You can paste the conversation transcript manually.</p>
+              <textarea
+                value={manualTranscript}
+                onChange={(e) => setManualTranscript(e.target.value)}
+                placeholder="Paste or type the conversation transcript here..."
+                style={{ width: '100%', minHeight: '120px', padding: '12px', borderRadius: '8px', border: '1px solid #e5e7eb' }}
+              />
+              <div style={{ marginTop: 12 }}>
+                <button className="secondary-button" onClick={handleUseManual} type="button">Use Manual Transcript</button>
+              </div>
+            </div>
+          )}
 
           {/* Live Transcript Area */}
           {transcript && (
